@@ -1,0 +1,4 @@
+
+ComputeMotion := proc ({ line1 := default, line2 := default, circle1 := default, circle2 := default }) local f, f1, f2, z, center1, radius1, center2, radius2; if line1 <> default then f1 := proc (z) options operator, arrow; -z+2*line1 end proc elif circle1 <> default then center1 := circle1[1]; radius1 := circle1[2]; f1 := proc (z) options operator, arrow; (center1*conjugate(z)+radius1^2-center1^2)/(conjugate(z)-center1) end proc else print("User error in defining geodesic 1") end if; if line2 <> default then f2 := proc (z) options operator, arrow; -z+2*line2 end proc elif circle2 <> default then center2 := circle2[1]; radius2 := circle2[2]; f2 := proc (z) options operator, arrow; (center2*conjugate(z)+radius2^2-center2^2)/(conjugate(z)-center2) end proc else print("User error in defining geodesic 2") end if; f := f2@f1; return simplify(f(z)) end proc;
+
+

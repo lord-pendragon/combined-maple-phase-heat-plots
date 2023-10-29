@@ -1,0 +1,65 @@
+restart;
+plotsetup(default);
+read "Heatplots.mpl";
+with(Heatplots);
+f := unapply(lambda*x^2/2 + (1 - lambda)*exp(x), x, lambda);
+diff(y*x - f(x, lambda), x);
+solve(%, x);
+attainingslope := %;
+subs(x = attainingslope, f(x, lambda));
+homotopy := unapply(%, y, lambda);
+
+Heatplot(homotopy, x = -3 .. 8, y = 0.1e-6 .. 1, numpoints = 2^15, axes = framed, scaling = unconstrained, view = [-3 .. 8, 0 .. 1, -1 .. 7], orientation = [90, 90, 180]);
+Heatplot(f, x = -3 .. 2, y = 0.00001 .. 1, numpoints = 2^15, axes = framed, scaling = unconstrained, view = [-3 .. 2, 0 .. 1, -1 .. 7], orientation = [90, 90, 180]);
+althomotopy := unapply(abs((2*LambertW(-1, -((lambda - 1)*exp(y/(2*lambda)))/(2*lambda))*lambda - y)^2/(4*lambda) + (1 - lambda)*exp(-(2*LambertW(-1, -((lambda - 1)*exp(y/(2*lambda)))/(2*lambda))*lambda - y)/(2*lambda))), y, lambda);
+slopefun := unapply(-(2*LambertW(-((lambda - 1)*exp(y/(2*lambda)))/(2*lambda))*lambda - y)/(2*lambda), y, lambda);
+Heatplot(slopefun, x = -3 .. 2, y = 0.00001 .. 1, numpoints = 2^15, axes = framed, scaling = unconstrained, view = [-3 .. 2, 0 .. 1, -1 .. 5], orientation = [90, 90, 180]);
+plot(LambertW(t), t = -1 .. 1, view = -10 .. 10);
+evalf(1/exp(1));
+solve(-((lambda - 1)*exp(y/(2*lambda)))/(2*lambda) = 1/exp(1), lambda);
+simplify(%);
+plot(%, y = -1 .. 1);
+NULL;
+NULL;
+y - lambda*x - (1 - lambda)*exp(x);
+subs(x = attainingslope, %);
+LambertW(-(lambda - 1)*exp(y/lambda)/lambda)*lambda - (1 - lambda)/exp((LambertW(-(lambda - 1)*exp(y/lambda)/lambda)*lambda - y)/lambda);
+LambertW(-(lambda - 1)*exp(y/lambda)/lambda)*(lambda - (1 - lambda)/(LambertW(-(lambda - 1)*exp(y/lambda)/lambda)*exp((LambertW(-(lambda - 1)*exp(y/lambda)/lambda)*lambda - y)/lambda)));
+LambertW(-(lambda - 1)*exp(y/lambda)/lambda)*(lambda - (1 - lambda)/(LambertW(-(lambda - 1)*exp(y/lambda)/lambda)*exp(LambertW(-(lambda - 1)*exp(y/lambda)/lambda))*exp(-y/lambda)));
+LambertW(-(lambda - 1)*exp(y/lambda)/lambda)*(lambda - (1 - lambda)/(-(lambda - 1)*exp(y/lambda)*exp(-y/lambda)/lambda));
+simplify(%);
+NULL;
+y*x - exp(x);
+diff(%, x);
+solve(% = 0, x);
+subs(x = %, y*x - exp(x));
+NULL;
+NULL;
+NULL;
+wpav := unapply(1/2*(-1 + lambda)*LambertW(exp((2*lambda - 2)*LambertW((2/lambda - 1)*exp(2*x/lambda))/(2 - lambda) + 2*x/lambda))^2 + (-1 + lambda)*LambertW(exp((2*lambda - 2)*LambertW((2/lambda - 1)*exp(2*x/lambda))/(2 - lambda) + 2*x/lambda)) - lambda*(-1 + lambda)^2*LambertW((2/lambda - 1)*exp(2*x/lambda))^2/(-2 + lambda)^2 - 1/2*x^2*(-2 + lambda)/lambda, x, lambda);
+difference := unapply(wpav(x, y) - homotopy(x, y), x, y);
+difference(x, y);
+
+Heatplot(difference, x = -3 .. 12, y = 0.0001 .. 1, numpoints = 2^10, axes = framed, scaling = unconstrained, view = [-3 .. 12, 0 .. 1, -3 .. 7], orientation = [90, 90, 180]);
+wpav(x, y);
+homotopy(x, y);
+
+
+f := unapply(lambda*x^2/2 + (1 - lambda)*exp(x), x, lambda);
+plot(f(x, 1/100), x = -1 .. 10, view = 0 .. 5);
+y*x - f(x, 1/100);
+diff(%, x);
+solve(% = 0, x);
+subs(x = %, y*x - f(x, 1/100));
+plot(%, y = -1 .. 10);
+homotopy2 := unapply(y*(-LambertW((1/lambda - 1)*exp(y/lambda)) + y/lambda) - (-LambertW((1/lambda - 1)*exp(y/lambda)) + y/lambda)^2/(2/lambda) - (1/lambda - 1)*exp(-LambertW((1/lambda - 1)*exp(y/lambda)) + y/lambda)*lambda, y, lambda);
+Heatplot(homotopy2, x = -3 .. 8, y = 0.1e-6 .. 1, numpoints = 2^15, axes = framed, scaling = unconstrained, view = [-3 .. 8, 0 .. 1, -1 .. 7], orientation = [90, 90, 180]);
+Q1. Can I prove that this thing I've called "homotopy2" is the true conjugate of t(x^2)/2 + (1-t)exp(x)?
+Q2. Can I prove that this thing is always bounded above by the paverage of (x^2)/2 and ent(x)?
+Q3. If so, then the conjugate paverage* is bounded above by the conjugate homotopy2*. Does that tell me anything interesting about the Lambert W function?
+Q4. How does solving an entropy optimization problem, like the one in the paper, compare with these two different things? Oh, also, can I formally prove that homotopy2 is a continuous transformation with respect to the epi topology.
+Q5. That original "homotopy" above, the first one, is a homotopy of (x^2)/2 and x+indicator(+). Why? Why is this weird thing the case? Can I prove it? Is it useful in some way?
+Heatplot(wpav, x = -3 .. 8, y = 0.1e-6 .. 1, numpoints = 2^15, axes = framed, scaling = unconstrained, view = [-3 .. 8, 0 .. 1, -1 .. 7], orientation = [90, 90, 180]);
+difference2 := unapply(wpav(x, y) - homotopy2(x, y), x, y);
+Heatplot(difference2, x = -3 .. 8, y = 0.1e-6 .. 1, numpoints = 2^15, axes = framed, scaling = unconstrained, view = [-3 .. 8, 0 .. 1, -1 .. 10], orientation = [90, 90, 180]);
+

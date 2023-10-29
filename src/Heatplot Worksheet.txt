@@ -1,0 +1,74 @@
+restart;
+plotsetup(default);
+read "Heatplots.mpl";
+with(Heatplots);
+Manual construction of a heat plot without using the package
+#Here I build the proximal average of the entropy and energy. 
+
+This form was proven and image appeared in: 
+
+Heinz H. Bauschke and Scott B. Lindstrom, “Proximal Averages for Minimization of Entropy Functionals,” Pure and Applied Functional Analysis (2020) 5(3), 505-531. 
+wpav := unapply(1/2*(-1 + lambda)*LambertW(exp((2*lambda - 2)*LambertW((2/lambda - 1)*exp(2*x/lambda))/(2 - lambda) + 2*x/lambda))^2 + (-1 + lambda)*LambertW(exp((2*lambda - 2)*LambertW((2/lambda - 1)*exp(2*x/lambda))/(2 - lambda) + 2*x/lambda)) - lambda*(-1 + lambda)^2*LambertW((2/lambda - 1)*exp(2*x/lambda))^2/(-2 + lambda)^2 - 1/2*x^2*(-2 + lambda)/lambda, x, lambda);
+ired := x -> piecewise(x <= 1/8, 1/2 + 4*x, 1/8 < x and x < 3/8, 1, 3/8 <= x and x <= 5/8, 5/2 - 4*x, 0);
+igreen := x -> piecewise(x <= 1/8, 0, 1/8 < x and x < 3/8, 4*x - 1/2, 3/8 <= x and x <= 5/8, 1, 5/8 <= x and x <= 7/8, 7/2 - 4*x, 0);
+iblue := x -> piecewise(x <= 3/8, 0, 3/8 < x and x <= 5/8, 4*x - 3/2, 5/8 < x and x <= 7/8, 1, 9/2 - 4*x);
+HighGamma := 0.9999;
+plot3d(wpav(x, y), x = -1 .. 4, y = 0.0001 .. HighGamma, color = [ired(y/HighGamma), igreen(y/HighGamma), iblue(y/HighGamma)], orientation = [90, 90, 180], lightmodel = none, style = surface, labels = [x, " ", " "], axes = framed, view = -1 .. 8, numpoints = 2^5);
+Proximal average for entropy and energy
+#In the first subsection, I build the proximal average of the entropy and energy. In the second subsection, provide the proximal average of their conjugates, which is the conjugate of the proximal average. For comparison, I provide the regular (non proximal) average versions in the third subsection.
+
+These forms were proven and images appeared in: 
+
+Heinz H. Bauschke and Scott B. Lindstrom, “Proximal Averages for Minimization of Entropy Functionals,” Pure and Applied Functional Analysis (2020) 5(3), 505-531. 
+Proximal Average
+Heatplot(wpav, x = -1 .. 4, y = 0.001 .. HighGamma, numpoints = 2^5, axes = framed, scaling = unconstrained, view = [-1 .. 4, 0.0001 .. HighGamma, -1 .. 8], orientation = [90, 90, 180]);
+Keyplot(wpav, x = -1 .. 4, y = 0 .. 1, numpoints = 2^5);
+Heatplotreverse(wpav, x = -1 .. 4, y = 0.001 .. HighGamma, numpoints = 2^5, axes = framed, scaling = unconstrained, view = [-1 .. 4, 0.0001 .. HighGamma, -1 .. 8], orientation = [90, 90, 180]);
+Keyplotreverse(wpav, x = -1 .. 4, y = 0 .. 1, numpoints = 2^5);
+Proximal Average of the Conjugates
+Non-proximal average for comparison
+Homotopy of entropy and its composition on negative identity
+#Since the energy is symmetric, I can use the homotopy of entropy and energy from Lindstrom & Bauschke's paper (cited in previous section) to build a homotopy of the entropy and the negative of itself.
+wpavleft := unapply(wpav(-x, -y), x, y);
+Heatplotreverse(wpavleft, x = -4 .. 1, y = -HighGamma .. -0.001, numpoints = 2^5, axes = framed, scaling = unconstrained, view = [-4 .. 1, -HighGamma .. -0.0001, -1 .. 8], orientation = [90, 90, 180]);
+entpavent := (x, y) -> piecewise(y <= 1, wpav(x, y), 1 < y, wpavleft(x, y - 2), infinity);
+
+Heatplot(entpavent, x = -4 .. 4, y = 0.1e-6 .. 1.9999999, numpoints = 2^5, axes = framed, scaling = constrained, view = [-4 .. 4, 0 .. 2, -1 .. 1.5], orientation = [90, 90, 180]);
+Moreau Envelope for |x-1/2|
+#Here I build a Moreau envelope from: 
+
+Heinz H. Bauschke, Minh N. Dao, and Scott B. Lindstrom, "Regularizing with Bregman-Moreau Envelopes," SIAM Journal on Optimization,  (2018) 28(4), 3208-3228. 
+Envelope := unapply(piecewise(x < 1/2 - lambda, abs(-1/2 + lambda + x) + (1/2*(x + lambda)^2 - 1/2*x^2 - x*lambda)/lambda, 1/2 + lambda < x, abs(-x + 1/2 + lambda) + (1/2*(x - lambda)^2 - 1/2*x^2 + x*lambda)/lambda, (1/8 - 1/2*x^2 - x*(-x + 1/2))/lambda), x, lambda);
+Heatplot(Envelope, x = 0 .. 1, y = 0 .. 2, numpoints = 2^5, axes = framed, scaling = unconstrained, view = [0 .. 1, 0 .. 2, 0 .. 1/2], orientation = [90, 90, 180]);
+Fermi-Dirac-entropy-Bregman Envelopes for | x-1/2|
+#Here I build the Bregman envelopes built from the Fermi-Dirac entropy that were proven and plotted in: 
+
+Heinz H. Bauschke, Minh N. Dao, and Scott B. Lindstrom, "Regularizing with Bregman-Moreau Envelopes," SIAM Journal on Optimization,  (2018) 28(4), 3208-3228. 
+Left and Right Envelopes
+Left Envelope Conjugate and its Derivative for entropy functional problem
+Boltzman-Shannon-entropy-Bregman Envelopes for |x-1/2| 
+#Here I build the Bregman envelopes built from the Boltzman-Shannon entropy that were proven and plotted in: 
+
+Heinz H. Bauschke, Minh N. Dao, and Scott B. Lindstrom, "Regularizing with Bregman-Moreau Envelopes," SIAM Journal on Optimization,  (2018) 28(4), 3208-3228. 
+LeftEnvelope := unapply(piecewise(y < 1/2*exp(-lambda), y*(1 - exp(lambda))/lambda + 1/2, 1/2*exp(lambda) < y, y*(1 - exp(-lambda))/lambda - 1/2, (-1/2*ln(2) - 1/2 - y*ln(y) + y - ln(y)*(1/2 - y))/lambda), y, lambda);
+Heatplot(LeftEnvelope, x = 0 .. 1, y = 0 .. 2, numpoints = 2^5, axes = framed, scaling = unconstrained, view = [0 .. 1, 0 .. 2, 0 .. 1/2], orientation = [90, 90, 180]);
+RightEnvelope := unapply(piecewise(0 < x and x < (1 - lambda)/2, log(1 - lambda)*x/lambda + 1/2, (1 + lambda)/2 < x, log(1 + lambda)*x/lambda - 1/2, (x*log(2*x) - x + 1/2)/lambda), x, lambda);
+Heatplot(RightEnvelope, x = 0 .. 1, y = 0 .. 2, numpoints = 2^5, axes = framed, scaling = unconstrained, view = [0 .. 1, 0 .. 2, 0 .. 1/2], orientation = [90, 90, 180]);
+Generalized Bregman Envelopes
+#Here I build the Generalized Bregman envelopes built from the logarithm that were proven and plotted in: 
+
+Regina S. Burachik, Minh N. Dao, and Scott B. Lindstrom, "The Generalized Bregman Distance," SIAM Journal on Optimization, (2019), 31(1), 404-424. 
+Sigma log
+LeftEnvelope := (y, lambda) -> piecewise(y = 0, 1/2, 1/2 <= y, y - 1/2, y <= 1/2 and lambda < 1, 1/2 - y, y <= 1/2*exp(1 - lambda) and 1 <= lambda, 1/2*(2*y*ln(y*exp(lambda - 1))*exp(lambda - 1) - 2*y*(lambda + ln(y))*exp(lambda - 1) + lambda)/lambda, -1/2*ln(2)/lambda - 1/2*ln(y)/lambda);
+Heatplot(LeftEnvelope, x = 0 .. 1, y = 0 .. 4, numpoints = 2^5, axes = framed, scaling = unconstrained, view = [0 .. 1, 0 .. 4, 0 .. 1/2]);
+RightEnvelope := (x, lambda) -> piecewise(x <= 1/2, 1/2 - x, 1/2 < x and lambda <= 1, x - 1/2, 1 <= lambda and 1/2*lambda < x, -1/2 + x*(1 + log(lambda))/lambda, x*log(2*x)/lambda);
+Heatplot(RightEnvelope, x = 0 .. 1, y = 0 .. 4, numpoints = 2^5, axes = framed, scaling = unconstrained, view = [0 .. 1, 0 .. 4, 0 .. 1/2]);
+Fitzpatrick log
+LeftEnvelope := unapply(piecewise(x <= exp(-y)/(y*(2/y + 2)), 1/2 - exp(y)*x, 1 < 1/y and exp(y)/(y*(2/y - 2)) < x, ((2*(1/y - 1)*exp(-y)*x + 2*exp(y)*x - 1/y)*y)/2, (LambertW(exp(1)/(2*x)) - 1)^2/(2*y*LambertW(exp(1)/(2*x)))), x, y);
+Heatplot(LeftEnvelope, x = 0 .. 1, y = 0 .. 4, numpoints = 2^5, axes = framed, scaling = unconstrained, view = [0 .. 1, 0 .. 4, 0 .. 1/2]);
+RightEnvelope := (x, lambda) -> piecewise(x = 0 and exp(1) <= 1/lambda, 1/2, x = 0 and 1/lambda < exp(1), 1/2*exp(-1)/lambda, 1/2*lambda*(LambertW(lambda) + 1)/LambertW(lambda) < x, x*LambertW(lambda)/(lambda*(LambertW(lambda) + 1)) - 1/2 + x*(LambertW(exp(1)*lambda*(LambertW(lambda) + 1)/LambertW(lambda)) - 1)^2/(lambda*LambertW(exp(1)*lambda*(LambertW(lambda) + 1)/LambertW(lambda))), 0 < x and x < -1/2*lambda*(LambertW(-lambda) + 1)/LambertW(-lambda) and exp(1) < 1/lambda, 1/2 + x*LambertW(-lambda)/(lambda*(LambertW(-lambda) + 1)) + x*(LambertW(-exp(1)*lambda*(LambertW(-lambda) + 1)/LambertW(-lambda)) - 1)^2/(lambda*LambertW(-exp(1)*lambda*(LambertW(-lambda) + 1)/LambertW(-lambda))), x*(LambertW(2*x*exp(1)) - 1)^2/(lambda*LambertW(2*x*exp(1))));
+Heatplot(RightEnvelope, x = 0 .. 1, y = 0 .. 4, numpoints = 2^5, axes = framed, scaling = unconstrained, view = [0 .. 1, 0 .. 4, 0 .. 1/2]);
+
+
+
+
