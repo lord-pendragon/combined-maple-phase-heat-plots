@@ -23,5 +23,6 @@ $include "PseudosphereNaive.mpl"
 $include "ComputeMotion.mpl"
 $include "PoincarePlanar.mpl"
 $include "PoincarePlanarUltra.mpl"
+$include "CombinedPhasePlots.mpl"
 
 end module:
