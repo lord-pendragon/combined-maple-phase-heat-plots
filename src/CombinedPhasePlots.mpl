@@ -77,8 +77,16 @@ visualizeFunction := proc(
                     ARG := argument(image);
                 end if;
                 C[n, m, 1] := evalf(ARG/(2*Pi));
-                C[n, m, 2] := evalf(1);
-                C[n, m, 3] := evalf(1 - 0.25*(ing(abs(image)) - floor(ing(abs(image)))) - 0.25*(ceil(anglemarks*ARG/(2*Pi)) - anglemarks*ARG/(2*Pi)));
+                if useSaturation then
+                    C[n, m, 2] := saturation(ARG/(2*Pi));
+                else
+                    C[n, m, 2] := evalf(1);
+                end if;
+                if useAngleLines then
+                    C[n, m, 3] := evalf(1 - 0.6*(ing(abs(image)) - floor(ing(abs(image)))));
+                else
+                    C[n, m, 3] := evalf(1 - 0.25*(ing(abs(image)) - floor(ing(abs(image)))) - 0.25*(ceil(anglemarks*ARG/(2*Pi)) - anglemarks*ARG/(2*Pi)));
+                end if;
             end do;
         end do;
 
