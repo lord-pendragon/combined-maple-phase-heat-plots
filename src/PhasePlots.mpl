@@ -1,8 +1,10 @@
 PhasePlots := module()
 option package;
 
-export  Stereographic, Planar, Pseudosphere, PoincareDisc, Beltrami, Klein, Modular, PoincareDiscUltra, Pseudoplane, BeltramiUltra, KleinUltra, Dini, PoincareDynamic, PoincareUltraDynamic, PseudosphereNaive, ComputeMotion, PoincarePlanar, PoincarePlanarUltra;
-local S2P, `Pi/2`, `1*Pi`, `2*Pi`, PhasePlots, T, SphX, SphY, SphZ, Sph2Pln, Pol2Sph, arg;
+export  Stereographic, Planar, Pseudosphere, PoincareDisc, Beltrami, Klein, Modular, PoincareDiscUltra, Pseudoplane, BeltramiUltra, KleinUltra, Dini, PoincareDynamic, PoincareUltraDynamic, PseudosphereNaive, ComputeMotion, PoincarePlanar, PoincarePlanarUltra, Heatplot, Heatplotreverse, Keyplot, Keyplotreverse;
+local S2P, `Pi/2`, `1*Pi`, `2*Pi`, PhasePlots, T, SphX, SphY, SphZ, Sph2Pln, Pol2Sph, arg, Heatplots;
+
+export  
 
 $include "Support.mpl"
 $include "Stereographic.mpl"
@@ -24,5 +26,9 @@ $include "ComputeMotion.mpl"
 $include "PoincarePlanar.mpl"
 $include "PoincarePlanarUltra.mpl"
 $include "CombinedPhasePlots.mpl"
+$include "Heatplot.mpl"
+$include "Heatplotreverse.mpl"
+$include "Keyplot.mpl"
+$include "Keyplotreverse.mpl"
 
 end module:

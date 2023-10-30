@@ -1,7 +1,11 @@
 visualizeFunction := proc(
-    L, R, T, B, gridside, f,
-    useAngleLines, anglemarks,
-    useSaturation, satmarks, useRings, visualType
+    visualTypes,
+    f,
+    L := -3, R := 3, T := 3, B := -3, 
+    gridside := 500, 
+    useAngleLines := false, anglemarks := 10,
+    useSaturation := false, satmarks := 10, 
+    useRings := false
 )
     local NumericEventHandler, A, C, ing, arglines, saturation, n, m, x, y, image, ARG;
     NumericEventHandler := (proc(operator, operands, defVal) return 0; end proc);
